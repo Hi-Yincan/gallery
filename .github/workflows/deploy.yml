@@ -31,6 +31,17 @@ jobs:
             git commit -m "chore: bump content submodule to $(git -C content rev-parse --short HEAD)"
           fi
 
+      - name: Guard unsupported formats (DNG/HEIC break build)
+        run: |
+          BAD=$(find content -iname '*.dng' -o -iname '*.heic' -o -iname '*.heif')
+          if [ -n "$BAD" ]; then
+            echo "⚠️ 发现不支持的格式,已自动剔除(不会部署):"
+            echo "$BAD"
+            find content -iname '*.dng' -o -iname '*.heic' -o -iname '*.heif' -delete
+          else
+            echo "✅ 无 DNG/HEIC"
+          fi
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
