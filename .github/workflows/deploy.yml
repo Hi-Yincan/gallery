@@ -14,16 +14,15 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (theme submodule)
+      - name: Checkout (no submodules yet)
         uses: actions/checkout@v4
-        with:
-          submodules: true
 
-      - name: Update content submodule (private, via PAT)
+      - name: Init submodules (theme public, content private via PAT)
         env:
           PAT: ${{ secrets.PAT }}
         run: |
           git config --global url."https://x-access-token:${PAT}@github.com/".insteadOf "https://github.com/"
+          git submodule update --init themes/hugo-theme-gallery
           git submodule update --init --remote content
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
