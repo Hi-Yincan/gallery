@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # ============================================================
 # 摄影站部署初始化脚本
-# 功能:配置 secrets → 触发构建 → 启用 Pages → 等待上线
-# 用法:填好下方 PAT 后执行  ./setup-deploy.sh
+# 功能:配置 secrets → 触发构建 → 绑定域名 → 等待上线
+# 用法:填好 PAT 后执行  ./setup-deploy.sh
 # ============================================================
 set -euo pipefail
 
@@ -12,6 +12,7 @@ set -euo pipefail
 # 创建:https://github.com/settings/tokens/new (scope 勾选 repo)
 SITE_REPO="Hi-Yincan/gallery"           # 主体仓库(公开)
 CONTENT_REPO="Hi-Yincan/gallery-content" # 内容仓库(私有)
+DOMAIN="hyc.ac"                         # GitHub Pages 自定义域名
 # ============================================
 
 if [ -z "${PAT:-}" ] && [ -f "$(dirname "$0")/.deploy.env" ]; then
@@ -22,11 +23,10 @@ if [ -z "${PAT:-}" ]; then
   read -r -s -p "请输入 PAT:" PAT
   echo
 fi
-
-[ -z "$PAT" ] && { echo "❌ 请先在脚本顶部填入 PAT"; exit 1; }
+[ -z "$PAT" ] && { echo "❌ 未获取到 PAT"; exit 1; }
 command -v gh >/dev/null || { echo "❌ 需要 gh CLI"; exit 1; }
 
-SITE_URL="https://${SITE_REPO%/*}.github.io/${SITE_REPO#*/}/"
+SITE_URL="https://$DOMAIN/${SITE_REPO#*/}/"
 
 # 1. 配置 secrets
 echo "==> 配置 secrets..."
@@ -48,15 +48,27 @@ for i in $(seq 1 30); do
   echo "   第 $((i*10)) 秒,构建中..."
 done
 
-# 4. 启用 GitHub Pages(gh-pages 分支)
-echo "==> 启用 GitHub Pages..."
-gh api -X POST "repos/$SITE_REPO/pages" \
-  -f "source[branch]=gh-pages" -f "source[path]=/" \
-  --jq '.html_url' 2>/dev/null || echo "(Pages 可能已启用,或稍后手动设置)"
+# 4. 启用 GitHub Pages 并绑定自定义域名
+echo "==> 启用 GitHub Pages + 绑定 $DOMAIN..."
+if gh api -X POST "repos/$SITE_REPO/pages" \
+  -f "source[branch]=gh-pages" -f "source[path]=/" -f "cname=$DOMAIN" >/dev/null 2>&1; then
+  echo "   Pages 已启用并绑定 $DOMAIN"
+else
+  # 域名验证要求:打印指引
+  st=$(gh api "repos/$SITE_REPO/pages" --jq '.status // "unavailable"' 2>/dev/null || echo unavailable)
+  echo "   Pages 状态: $st"
+  if [ "$st" = "pending_domain_verification" ]; then
+    echo "   ⚠️  需要在 DNS 添加 TXT 记录完成域名验证:"
+    echo "       在 hyc.ac 的 DNS 面板(DNS 托管商)添加:"
+    echo "       TXT    _github-pages-challenge-Hi-Yincan.hyc.ac   (值见仓库 Settings → Pages 页面)"
+    echo "       添加后等待数分钟,再运行: gh api -X POST repos/$SITE_REPO/pages/verification"
+  fi
+fi
 
 # 5. 等待站点 200
 echo "==> 等待站点上线: $SITE_URL"
-for i in $(seq 1 12); do
+code=000
+for i in $(seq 1 18); do
   sleep 10
   code=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL" || true)
   echo "   第 $((i*10)) 秒 → HTTP $code"
