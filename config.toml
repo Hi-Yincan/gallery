@@ -1,4 +1,4 @@
-baseURL = "https://HuangYincan.github.io/gallery/"
+baseURL = "https://Hi-Yincan.github.io/gallery/"
 copyright = "© Yincan Huang"
 defaultContentLanguage = "zh-cn"
 disableKinds = ["taxonomy"]

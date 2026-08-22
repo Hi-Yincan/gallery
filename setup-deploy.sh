@@ -7,11 +7,21 @@
 set -euo pipefail
 
 # ================= 变量置顶 =================
-PAT=""                                    # GitHub classic PAT(scope 勾选 repo)
-                                          # 创建:https://github.com/settings/tokens/new
-SITE_REPO="HuangYincan/gallery"           # 主体仓库(公开)
-CONTENT_REPO="HuangYincan/gallery-content" # 内容仓库(私有)
+# PAT 不写入本文件(公开仓库会被 GitHub 拦截)。
+# 读取顺序:环境变量 PAT > ~/gallery/.deploy.env > 交互输入
+# 创建:https://github.com/settings/tokens/new (scope 勾选 repo)
+SITE_REPO="Hi-Yincan/gallery"           # 主体仓库(公开)
+CONTENT_REPO="Hi-Yincan/gallery-content" # 内容仓库(私有)
 # ============================================
+
+if [ -z "${PAT:-}" ] && [ -f "$(dirname "$0")/.deploy.env" ]; then
+  # shellcheck disable=SC1091
+  source "$(dirname "$0")/.deploy.env"
+fi
+if [ -z "${PAT:-}" ]; then
+  read -r -s -p "请输入 PAT:" PAT
+  echo
+fi
 
 [ -z "$PAT" ] && { echo "❌ 请先在脚本顶部填入 PAT"; exit 1; }
 command -v gh >/dev/null || { echo "❌ 需要 gh CLI"; exit 1; }

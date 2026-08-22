@@ -3,4 +3,4 @@
 	url = https://github.com/nicokaiser/hugo-theme-gallery.git
 [submodule "content"]
 	path = content
-	url = https://github.com/HuangYincan/gallery-content.git
+	url = https://github.com/Hi-Yincan/gallery-content.git
