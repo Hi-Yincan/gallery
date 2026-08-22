@@ -9,6 +9,9 @@ timeout = "120s"
 title = "Gallery"
 theme = "hugo-theme-gallery"
 
+# 内容仓库根 README.md 仅作说明,不渲染为网页
+ignoreFiles = ['README\.md$']
+
 [params]
   defaultTheme = "dark"
   description = "摄影作品集:自拍、人像、旅行"
