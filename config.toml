@@ -1,7 +1,6 @@
 baseURL = "https://hyc.ac/gallery/"
 copyright = "© Yincan Huang"
 defaultContentLanguage = "zh-cn"
-disableKinds = ["taxonomy"]
 enableRobotsTXT = true
 languageCode = "zh-cn"
 timeZone = "Asia/Shanghai"
@@ -30,6 +29,20 @@ ignoreFiles = ['README\.md$']
   home = ["HTML", "RSS"]
   page = ["HTML"]
   section = ["HTML"]
+
+# 只保留 categories 分类(tags 默认启用,但本站用不到)
+[taxonomies]
+  category = "categories"
+
+# 底部导航菜单
+[[menu.footer]]
+  name = "GitHub"
+  url = "https://github.com/Hi-Yincan"
+  weight = 1
+[[menu.footer]]
+  name = "Theme"
+  url = "https://github.com/nicokaiser/hugo-theme-gallery"
+  weight = 2
 
 [imaging]
   quality = 75
