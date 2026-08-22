@@ -45,8 +45,8 @@ ignoreFiles = ['README\.md$']
   weight = 2
 
 [imaging]
-  quality = 90
-  resampleFilter = "MitchellNetravali"
+  quality = 95
+  resampleFilter = "Lanczos"
   [imaging.exif]
     disableDate = false
     disableLatLong = true
