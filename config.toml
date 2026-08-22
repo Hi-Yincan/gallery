@@ -1,0 +1,37 @@
+baseURL = "https://HuangYincan.github.io/gallery/"
+copyright = "© Yincan Huang"
+defaultContentLanguage = "zh-cn"
+disableKinds = ["taxonomy"]
+enableRobotsTXT = true
+languageCode = "zh-cn"
+timeZone = "Asia/Shanghai"
+timeout = "120s"
+title = "Gallery"
+theme = "hugo-theme-gallery"
+
+[params]
+  defaultTheme = "dark"
+  description = "摄影作品集:自拍、人像、旅行"
+  title = "Gallery"
+  [params.author]
+    email = "Yincan_Huang@zju.edu.cn"
+    name = "Yincan Huang"
+  [params.socialIcons]
+    github = "https://github.com/HuangYincan"
+  [params.gallery]
+    #boxSpacing = 10
+    #targetRowHeight = 288
+    #targetRowHeightTolerance = 0.25
+
+[outputs]
+  home = ["HTML", "RSS"]
+  page = ["HTML"]
+  section = ["HTML"]
+
+[imaging]
+  quality = 75
+  resampleFilter = "CatmullRom"
+  [imaging.exif]
+    disableDate = false
+    disableLatLong = true
+    includeFields = "ImageDescription|Orientation"
