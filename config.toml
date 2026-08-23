@@ -40,8 +40,8 @@ ignoreFiles = ['README\.md$']
   url = "https://github.com/Hi-Yincan"
   weight = 1
 [[menu.footer]]
-  name = "Theme"
-  url = "https://github.com/nicokaiser/hugo-theme-gallery"
+  name = "Blog"
+  url = "https://hyc.ac/blog/"
   weight = 2
 
 [imaging]
