@@ -4,7 +4,7 @@
 
 🌐 **在线站点:https://hyc.ac/gallery/**  ·
 
-照片按**项目 / 相册**两级组织:首页是自拍、人像、旅行等分组的卡片墙;进入「人像」「旅行」后按拍摄对象(小明 / 小红)或行程(云南行 / 日本行)再次细分,点进相册即照片墙,支持灯箱查看与多尺寸响应式缩略图。
+照片按**项目 / 相册**两级组织:首页是 Me、旅行、猫狗等分组的卡片墙;进入「旅行」后按行程(云南行 / 江苏)再次细分,点进相册即照片墙,支持灯箱查看与多尺寸响应式缩略图。
 
 ## 架构:内容与主体分离
 
@@ -12,9 +12,9 @@
 
 ```
 Hi-Yincan/gallery(本仓库 · 公开)          Hi-Yincan/gallery-content(私有)
-│  config.toml                             │  自拍/           ← 相册(照片墙)
-│  themes/hugo-theme-gallery/ ←submodule  │  人像/小明 小红   ← 按名字分类
-│  content/ ────submodule───────────────→ │  旅行/云南行 日本行 ← 按行程项目
+│  config.toml                             │  Me/              ← 相册(照片墙)
+│  themes/hugo-theme-gallery/ ←submodule  │  旅行/云南行 江苏  ← 按行程项目
+│  content/ ────submodule───────────────→ │  猫狗/            ← 相册(照片墙)
 │  .github/workflows/deploy.yml            │  README.md(操作指南)
 ```
 
