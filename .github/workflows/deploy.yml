@@ -34,7 +34,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if ! git diff --quiet content; then
             git add content
-            git commit -m "chore: bump content submodule to $(git -C content rev-parse --short HEAD)"
+            # [skip ci]: bump 提交只是记录指针,不触发新一轮构建
+            git commit -m "chore: bump content submodule to $(git -C content rev-parse --short HEAD) [skip ci]"
+            # 与手动 push 撞车导致推送失败时只告警:部署用的是 --remote 的最新内容,
+            # 指针留给下一次运行自动补
+            git push origin main || echo "::warning::bump push 失败,主仓库指针未同步,下次运行自动重试"
           fi
 
       - name: Guard unsupported formats (DNG/HEIC break build)
